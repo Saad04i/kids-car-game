@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kids Car Painter & Racing Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <!-- Main Menu -->
+        <div id="main-menu" class="screen active">
+            <div class="menu-content">
+                <h1>🏎️ Car Painter & Racer</h1>
+                <p>Paint your car and race to victory!</p>
+                <button onclick="startPainter()" class="btn btn-large">🎨 Paint a Car</button>
+                <button onclick="startRacing()" class="btn btn-large">🏁 Race</button>
+                <button onclick="showInstructions()" class="btn btn-secondary">ℹ️ How to Play</button>
+            </div>
+        </div>
+
+        <!-- Car Painter Screen -->
+        <div id="painter-screen" class="screen">
+            <div class="painter-container">
+                <h2>🎨 Paint Your Car!</h2>
+                
+                <div class="painter-content">
+                    <!-- Car Canvas -->
+                    <div class="car-display">
+                        <svg id="car-canvas" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Car body -->
+                            <rect id="car-body" x="20" y="40" width="160" height="40" rx="5" fill="#FF6B6B" stroke="#333" stroke-width="2"/>
+                            <!-- Car cabin -->
+                            <rect id="car-cabin" x="80" y="20" width="60" height="20" rx="3" fill="#FF6B6B" stroke="#333" stroke-width="2"/>
+                            <!-- Front wheel -->
+                            <circle cx="50" cy="85" r="12" fill="#333" stroke="#666" stroke-width="2"/>
+                            <circle cx="50" cy="85" r="8" fill="#999"/>
+                            <!-- Back wheel -->
+                            <circle cx="150" cy="85" r="12" fill="#333" stroke="#666" stroke-width="2"/>
+                            <circle cx="150" cy="85" r="8" fill="#999"/>
+                            <!-- Windows -->
+                            <rect x="85" y="25" width="12" height="12" fill="#87CEEB" stroke="#333" stroke-width="1" rx="2"/>
+                            <rect x="103" y="25" width="12" height="12" fill="#87CEEB" stroke="#333" stroke-width="1" rx="2"/>
+                            <!-- Headlights -->
+                            <circle cx="25" cy="52" r="4" fill="#FFFF00" stroke="#333" stroke-width="1"/>
+                            <circle cx="25" cy="68" r="4" fill="#FFFF00" stroke="#333" stroke-width="1"/>
+                        </svg>
+                    </div>
+
+                    <!-- Color Palette -->
+                    <div class="color-palette">
+                        <h3>Colors:</h3>
+                        <div class="color-grid">
+                            <button class="color-btn" style="background-color: #FF6B6B;" onclick="changeCarColor('#FF6B6B')"></button>
+                            <button class="color-btn" style="background-color: #4ECDC4;" onclick="changeCarColor('#4ECDC4')"></button>
+                            <button class="color-btn" style="background-color: #FFE66D;" onclick="changeCarColor('#FFE66D')"></button>
+                            <button class="color-btn" style="background-color: #A8E6CF;" onclick="changeCarColor('#A8E6CF')"></button>
+                            <button class="color-btn" style="background-color: #FF8B94;" onclick="changeCarColor('#FF8B94')"></button>
+                            <button class="color-btn" style="background-color: #B19CD9;" onclick="changeCarColor('#B19CD9')"></button>
+                            <button class="color-btn" style="background-color: #FFB7B2;" onclick="changeCarColor('#FFB7B2')"></button>
+                            <button class="color-btn" style="background-color: #95E1D3;" onclick="changeCarColor('#95E1D3')"></button>
+                        </div>
+                    </div>
+
+                    <!-- Pattern Selection -->
+                    <div class="pattern-section">
+                        <h3>Patterns:</h3>
+                        <button class="pattern-btn" onclick="addStripes()">🟡 Stripes</button>
+                        <button class="pattern-btn" onclick="addSpots()">⚫ Spots</button>
+                        <button class="pattern-btn" onclick="clearPattern()">✨ Clear</button>
+                    </div>
+                </div>
+
+                <!-- Buttons -->
+                <div class="painter-buttons">
+                    <button onclick="saveCar()" class="btn btn-success">✅ Save & Race</button>
+                    <button onclick="backToMenu()" class="btn btn-secondary">← Back</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Racing Screen -->
+        <div id="racing-screen" class="screen">
+            <div class="racing-container">
+                <h2>🏁 Race Time!</h2>
+                
+                <div class="difficulty-select">
+                    <p>Choose Difficulty:</p>
+                    <button onclick="startRace('easy')" class="btn btn-diff">Easy 🟢</button>
+                    <button onclick="startRace('medium')" class="btn btn-diff">Medium 🟡</button>
+                    <button onclick="startRace('hard')" class="btn btn-diff">Hard 🔴</button>
+                </div>
+
+                <button onclick="backToMenu()" class="btn btn-secondary">← Back</button>
+            </div>
+        </div>
+
+        <!-- Game Play Screen -->
+        <div id="gameplay-screen" class="screen">
+            <div class="game-header">
+                <div class="player-info">
+                    <h3>Your Car</h3>
+                    <div class="progress-bar">
+                        <div id="player-progress" class="progress-fill"></div>
+                    </div>
+                </div>
+                <div class="player-info">
+                    <h3>Opponent</h3>
+                    <div class="progress-bar">
+                        <div id="opponent-progress" class="progress-fill"></div>
+                    </div>
+                </div>
+            </div>
+
+            <canvas id="game-canvas"></canvas>
+
+            <div id="game-message" class="game-message"></div>
+            <button id="restart-btn" class="btn btn-success" onclick="backToMenu()" style="display:none;">🏠 Back to Menu</button>
+        </div>
+
+        <!-- Instructions Screen -->
+        <div id="instructions-screen" class="screen">
+            <div class="instructions-content">
+                <h2>How to Play 📖</h2>
+                <div class="instructions-text">
+                    <h3>🎨 Painter Mode:</h3>
+                    <p>1. Click colors to change your car's color</p>
+                    <p>2. Add stripes or spots for cool patterns</p>
+                    <p>3. Click "Save & Race" when you're happy</p>
+
+                    <h3>🏁 Racing Mode:</h3>
+                    <p>4. Choose a difficulty level</p>
+                    <p>5. Use <strong>Arrow Keys</strong> or <strong>A/D</strong> to steer</p>
+                    <p>6. Stay on the track and beat the opponent!</p>
+                    <p>7. Reach the finish line first to win! 🏆</p>
+
+                    <h3>Tips:</h3>
+                    <p>✓ Avoid obstacles and staying in the lane</p>
+                    <p>✓ Don't crash into the opponent's car</p>
+                    <p>✓ Keep your speed steady</p>
+                </div>
+                <button onclick="backToMenu()" class="btn btn-large">← Back to Menu</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
